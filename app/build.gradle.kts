@@ -56,6 +56,14 @@ dependencies {
     // This adds the library for Firebase Storage (file uploads)
     implementation("com.google.firebase:firebase-storage")
 
+    // Room Database (local storage)
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+
+    implementation("androidx.browser:browser:1.8.0")
+
 
 
 
