@@ -89,7 +89,10 @@ public class MainActivity extends AppCompatActivity {
         // --- 4. "Coming Soon" Placeholders for unfinished features ---
         cardEvent.setOnClickListener(v -> showComingSoonToast("Event Tracker"));
 
-        cardDoubt.setOnClickListener(v -> showComingSoonToast("Doubt Forum"));
+        // --- Doubt Forum Card ---
+        cardDoubt.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, DoubtFeedActivity.class));
+        });
         cardLostFound.setOnClickListener(v -> showComingSoonToast("Lost & Found"));
     }
 

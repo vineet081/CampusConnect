@@ -53,6 +53,12 @@
 
         <activity android:name=".LinkCategoriesActivity" />
 
+        <activity android:name=".DoubtFeedActivity" />
+
+        <activity android:name=".AskDoubtActivity" />
+
+        <activity android:name=".DoubtDetailsActivity" />
+
 
     </application>
 

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ask a Doubt"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnSurface"
+            android:layout_marginBottom="24dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Question Title (e.g., Binary Search Error)"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_doubt_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences"
+                android:maxLines="2"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Subject / Tag"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            app:selectionRequired="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_tag_dsa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DSA"
+                android:checkable="true"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_tag_java"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Java"
+                android:checkable="true"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_tag_web"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Web Dev"
+                android:checkable="true"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_tag_other"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Other"
+                android:checkable="true"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="Describe your problem in detail..."
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_doubt_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:minLines="5"
+                android:inputType="textMultiLine|textCapSentences"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_attach_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Attach Image"
+            app:icon="@drawable/ic_links"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+        <ImageView
+            android:id="@+id/iv_doubt_image_preview"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:src="@android:drawable/ic_menu_gallery"
+            android:background="#E0E0E0"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_post_doubt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:paddingVertical="14dp"
+            android:text="Post Doubt" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
