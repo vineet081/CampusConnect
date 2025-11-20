@@ -7,7 +7,8 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:padding="24dp"
-    tools:context=".ProfileActivity">
+    android:fitsSystemWindows="true"
+    tools:context=".fragments.ProfileFragment">
 
     <TextView
         android:layout_width="wrap_content"

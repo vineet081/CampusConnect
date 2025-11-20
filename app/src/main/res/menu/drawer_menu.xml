@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_profile_edit"
+            android:icon="@drawable/ic_nav_profile"
+            android:title="Edit Profile" />
+
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_nav_search"
+            android:title="Settings" />
+    </group>
+
+    <item android:title="Mode">
+        <menu>
+            <item
+                android:id="@+id/nav_toggle_peer"
+                android:icon="@drawable/ic_group"
+                android:title="Switch to Peer Solver" />
+
+            <item
+                android:id="@+id/nav_toggle_utility"
+                android:icon="@drawable/ic_task"
+                android:title="Switch to Utility"
+                android:visible="false" />
+        </menu>
+    </item>
+
+    <item android:title="Account">
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_nav_profile"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>

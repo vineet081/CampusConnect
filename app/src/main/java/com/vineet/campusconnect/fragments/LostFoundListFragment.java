@@ -1,5 +1,6 @@
 package com.vineet.campusconnect.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.vineet.campusconnect.LostFoundDetailsActivity; // Make sure this import is here
 import com.vineet.campusconnect.R;
 import com.vineet.campusconnect.adapters.LostFoundAdapter;
 import com.vineet.campusconnect.models.LostFoundItem;
@@ -56,11 +58,9 @@ public class LostFoundListFragment extends Fragment {
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-        // Create the query based on the status ("LOST" or "FOUND")
+        // This is the simple query that doesn't need an index
         Query query = db.collection("lost_and_found")
-                .whereEqualTo("status", fragmentStatusType)
-                .whereEqualTo("isReturned", false) // Only show items not yet returned
-                .orderBy("timestamp", Query.Direction.DESCENDING);
+                .whereEqualTo("status", fragmentStatusType);
 
         FirestoreRecyclerOptions<LostFoundItem> options = new FirestoreRecyclerOptions.Builder<LostFoundItem>()
                 .setQuery(query, LostFoundItem.class)
@@ -69,8 +69,12 @@ public class LostFoundListFragment extends Fragment {
         adapter = new LostFoundAdapter(options, getContext());
 
         adapter.setOnItemClickListener(documentId -> {
-            // We'll build this details page later
-            Toast.makeText(getContext(), "Open details for: " + documentId, Toast.LENGTH_SHORT).show();
+            // This code block was broken before. It is now fixed.
+            Toast.makeText(getContext(), "Opening ID: " + documentId, Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(getContext(), LostFoundDetailsActivity.class);
+            intent.putExtra("DOCUMENT_ID", documentId);
+            startActivity(intent);
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

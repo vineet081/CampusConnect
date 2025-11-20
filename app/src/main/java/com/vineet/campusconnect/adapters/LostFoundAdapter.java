@@ -38,12 +38,11 @@ public class LostFoundAdapter extends FirestoreRecyclerAdapter<LostFoundItem, Lo
 
         // 1. Set Basic Text
         holder.tvTitle.setText(model.getTitle());
-        holder.tvLocation.setText(model.getLocation());
-        holder.tvAuthor.setText("• " + model.getAuthorName());
+        holder.tvDescription.setText(model.getDescription()); // <-- NEWLY ADDED
 
-        // 2. Format Date (e.g., "Apr 18")
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd", Locale.getDefault());
-        holder.tvDate.setText(sdf.format(new Date(model.getTimestamp())));
+        // 2. Format Date
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+        holder.tvDate.setText("Date: " + sdf.format(new Date(model.getTimestamp()))); // <-- UPDATED
 
         // 3. Load Image (or set placeholder)
         if (model.getImageUrl() != null && !model.getImageUrl().isEmpty()) {
@@ -53,10 +52,11 @@ public class LostFoundAdapter extends FirestoreRecyclerAdapter<LostFoundItem, Lo
                     .into(holder.ivImage);
         } else {
             // Set a default icon if no image was uploaded
-            holder.ivImage.setImageResource(R.drawable.ic_lost_found); // Use a generic icon
+            holder.ivImage.setImageResource(R.drawable.ic_lost_found);
+            holder.ivImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE); // Adjust scale for placeholder
         }
 
-        // 4. *** LOGIC FOR LOST/FOUND TAG ***
+        // 4. LOGIC FOR LOST/FOUND TAG
         if ("FOUND".equals(model.getStatus())) {
             holder.chipStatus.setText("FOUND");
             holder.chipStatus.setChipBackgroundColor(ColorStateList.valueOf(Color.parseColor("#4CAF50"))); // Green
@@ -65,10 +65,9 @@ public class LostFoundAdapter extends FirestoreRecyclerAdapter<LostFoundItem, Lo
             holder.chipStatus.setChipBackgroundColor(ColorStateList.valueOf(Color.parseColor("#D32F2F"))); // Red
         }
 
-        // 5. Click listener to open details page (Phase 3)
+        // 5. Click listener to open details page
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
-                // We pass the Document ID to the details page
                 String documentId = getSnapshots().getSnapshot(position).getId();
                 listener.onItemClick(documentId);
             }
@@ -92,20 +91,21 @@ public class LostFoundAdapter extends FirestoreRecyclerAdapter<LostFoundItem, Lo
         this.listener = listener;
     }
 
-    // --- ViewHolder Class ---
+    // --- ViewHolder Class (Updated) ---
     static class LostFoundViewHolder extends RecyclerView.ViewHolder {
         ImageView ivImage;
-        TextView tvTitle, tvLocation, tvDate, tvAuthor;
+        TextView tvTitle, tvDescription, tvDate; // <-- UPDATED
         Chip chipStatus;
 
         public LostFoundViewHolder(@NonNull View itemView) {
             super(itemView);
             ivImage = itemView.findViewById(R.id.iv_item_image);
             tvTitle = itemView.findViewById(R.id.tv_item_title);
-            tvLocation = itemView.findViewById(R.id.tv_item_location);
-            tvDate = itemView.findViewById(R.id.tv_item_date);
-            tvAuthor = itemView.findViewById(R.id.tv_item_author);
+            tvDescription = itemView.findViewById(R.id.tv_item_description); // <-- NEWLY ADDED
+            tvDate = itemView.findViewById(R.id.tv_item_date); // <-- NEWLY ADDED
             chipStatus = itemView.findViewById(R.id.chip_status_tag);
+
+            // Removed the old tvLocation and tvAuthor views
         }
     }
 }

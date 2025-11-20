@@ -10,8 +10,8 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
+import com.vineet.campusconnect.MainActivity;
 import com.vineet.campusconnect.R;
-import com.vineet.campusconnect.TaskManagerActivity;
 
 public class AlertReceiver extends BroadcastReceiver {
     private static final String CHANNEL_ID = "task_channel";
@@ -24,7 +24,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
         // 2. Create the action (what happens when they tap the notification)
         // We want it to open the TaskManagerActivity
-        Intent tapIntent = new Intent(context, TaskManagerActivity.class);
+        Intent tapIntent = new Intent(context, MainActivity.class);
         tapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, tapIntent, PendingIntent.FLAG_IMMUTABLE);
 

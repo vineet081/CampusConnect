@@ -59,9 +59,17 @@
 
         <activity android:name=".DoubtDetailsActivity" />
 
-        <activity android:name=".LostAndFoundActivity" />
-
+        <activity
+            android:name=".LostAndFoundActivity"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|screenSize" />
         <activity android:name=".PostLostItemActivity" />
+
+        <activity android:name=".LostFoundDetailsActivity" />
+
+        <activity android:name=".FacultyDirectoryActivity" />
+
+        <activity android:name=".FacultyDetailsActivity" />
 
 
     </application>
