@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         bottomNavView = findViewById(R.id.bottom_nav_view);
 
+        // Handle Notch / Edge-to-Edge
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawer_layout), (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(insets.left, insets.top, insets.right, 0);
@@ -51,8 +52,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (navHostFragment != null) {
             navController = navHostFragment.getNavController();
-            NavigationUI.setupWithNavController(bottomNavView, navController);
 
+            // Connect Bottom Navigation
+            bottomNavView.setOnItemSelectedListener(item -> {
+                return NavigationUI.onNavDestinationSelected(item, navController);
+            });
+
+            // Reset to top of stack when re-selecting the same tab
             bottomNavView.setOnItemReselectedListener(item -> {
                 int destinationId = item.getItemId();
                 navController.popBackStack(destinationId, false);
@@ -66,15 +72,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        // --- Profile & Settings ---
         if (id == R.id.nav_profile_edit) {
             if (navController != null) navController.navigate(R.id.nav_edit_profile);
         }
         else if (id == R.id.nav_settings) {
             if (navController != null) navController.navigate(R.id.nav_settings);
         }
-
-        // --- Share & Rate & Privacy (NEW PROFESSIONAL MESSAGES) ---
+        else if (id == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
+        else if (id == R.id.nav_toggle_peer) {
+            // FIX: Use method that guarantees Home is loaded first
+            updateHomeFragmentMode("peer");
+            toggleMenuVisibility(false);
+        }
+        else if (id == R.id.nav_toggle_utility) {
+            // FIX: Use method that guarantees Home is loaded first
+            updateHomeFragmentMode("utility");
+            toggleMenuVisibility(true);
+        }
         else if (id == R.id.nav_share) {
             Toast.makeText(this, "Sharing feature will be available soon!", Toast.LENGTH_SHORT).show();
         }
@@ -83,24 +102,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else if (id == R.id.nav_privacy) {
             Toast.makeText(this, "Privacy Policy page is coming soon.", Toast.LENGTH_SHORT).show();
-        }
-
-        // --- Logout ---
-        else if (id == R.id.nav_logout) {
-            FirebaseAuth.getInstance().signOut();
-            Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        }
-
-        // --- Mode Switching ---
-        else if (id == R.id.nav_toggle_peer) {
-            updateHomeFragmentMode("peer");
-            toggleMenuVisibility(false);
-        }
-        else if (id == R.id.nav_toggle_utility) {
-            updateHomeFragmentMode("utility");
-            toggleMenuVisibility(true);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -114,16 +115,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void updateHomeFragmentMode(String mode) {
+        // 1. Force selection of the Home tab first.
         if (bottomNavView != null) {
             bottomNavView.setSelectedItemId(R.id.nav_home);
         }
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        if (navHostFragment != null) {
-            Fragment currentFragment = navHostFragment.getChildFragmentManager().getPrimaryNavigationFragment();
-            if (currentFragment instanceof HomeFragment) {
-                ((HomeFragment) currentFragment).switchToMode(mode);
+
+        // 2. FIX: Add a small delay to ensure the HomeFragment has time to attach
+        // before we try to call its methods, resolving the inconsistency issue.
+        bottomNavView.postDelayed(() -> {
+            NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+            if (navHostFragment != null) {
+                Fragment currentFragment = navHostFragment.getChildFragmentManager().getPrimaryNavigationFragment();
+                if (currentFragment instanceof HomeFragment) {
+                    // This call will now execute reliably after the fragment swap completes.
+                    ((HomeFragment) currentFragment).switchToMode(mode);
+                }
             }
-        }
+        }, 100); // 100ms delay
     }
 
     public void openDrawer() {

@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface"
+    android:fitsSystemWindows="true"
     tools:context=".fragments.HomeFragment">
 
     <androidx.core.widget.NestedScrollView
@@ -44,7 +45,6 @@
                     android:layout_height="48dp"
                     android:src="@drawable/ic_menu"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Menu"
                     app:tint="?attr/colorOnSurface"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -276,7 +276,6 @@
                             android:layout_alignParentBottom="true"/>
                     </RelativeLayout>
                 </com.google.android.material.card.MaterialCardView>
-
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_doubt"

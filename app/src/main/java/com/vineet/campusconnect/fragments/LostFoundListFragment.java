@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.vineet.campusconnect.LostFoundDetailsActivity; // Make sure this import is here
+import com.vineet.campusconnect.LostFoundDetailsActivity;
 import com.vineet.campusconnect.R;
 import com.vineet.campusconnect.adapters.LostFoundAdapter;
 import com.vineet.campusconnect.models.LostFoundItem;
@@ -49,7 +49,6 @@ public class LostFoundListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the simple layout we just made
         View view = inflater.inflate(R.layout.fragment_lost_found_list, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view_lost_found);
 
@@ -58,6 +57,9 @@ public class LostFoundListFragment extends Fragment {
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
+        // FIX 1: Add setItemAnimator(null)
+        recyclerView.setItemAnimator(null);
+
         // This is the simple query that doesn't need an index
         Query query = db.collection("lost_and_found")
                 .whereEqualTo("status", fragmentStatusType);
@@ -69,7 +71,6 @@ public class LostFoundListFragment extends Fragment {
         adapter = new LostFoundAdapter(options, getContext());
 
         adapter.setOnItemClickListener(documentId -> {
-            // This code block was broken before. It is now fixed.
             Toast.makeText(getContext(), "Opening ID: " + documentId, Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(getContext(), LostFoundDetailsActivity.class);

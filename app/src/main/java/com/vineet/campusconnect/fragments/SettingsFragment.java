@@ -31,33 +31,39 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        // 1. Initialize Shared Preferences
         sharedPreferences = requireActivity().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
 
-        // 2. Find Views
         switchDarkMode = view.findViewById(R.id.switch_dark_mode);
         switchNotifications = view.findViewById(R.id.switch_notifications);
         layoutChangePass = view.findViewById(R.id.layout_change_password);
         layoutFeedback = view.findViewById(R.id.layout_feedback);
 
-        // 3. Setup Dark Mode Switch State
+        // --- FIX: Handle Dark Mode Switch Safely ---
         boolean isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
+
+        // 1. Remove listener before setting state to prevent infinite loop
+        switchDarkMode.setOnCheckedChangeListener(null);
+
+        // 2. Set the visual state
         switchDarkMode.setChecked(isDarkMode);
 
+        // 3. Re-attach listener for USER clicks only
         switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
             // Save preference
             sharedPreferences.edit().putBoolean("dark_mode", isChecked).apply();
 
-            // Apply Theme
+            // Apply Theme (This recreates the activity)
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
         });
+        // -------------------------------------------
 
-        // 4. Setup Notifications Switch (Visual only for now)
+        // Setup Notifications Switch
         boolean isNotifEnabled = sharedPreferences.getBoolean("notifications", true);
+        switchNotifications.setOnCheckedChangeListener(null); // Good practice here too
         switchNotifications.setChecked(isNotifEnabled);
         switchNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> {
             sharedPreferences.edit().putBoolean("notifications", isChecked).apply();
@@ -65,7 +71,7 @@ public class SettingsFragment extends Fragment {
             Toast.makeText(getContext(), "Task Reminders " + status, Toast.LENGTH_SHORT).show();
         });
 
-        // 5. Change Password Click
+        // Change Password Click
         layoutChangePass.setOnClickListener(v -> {
             String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
             if (email != null) {
@@ -77,10 +83,10 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        // 6. Feedback Click
+        // Feedback Click
         layoutFeedback.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_SENDTO);
-            intent.setData(Uri.parse("mailto:support@campusconnect.com")); // Replace with your email
+            intent.setData(Uri.parse("mailto:support@campusconnect.com"));
             intent.putExtra(Intent.EXTRA_SUBJECT, "CampusConnect Feedback");
             try {
                 startActivity(intent);
